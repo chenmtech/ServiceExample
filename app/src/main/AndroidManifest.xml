@@ -18,6 +18,9 @@
         </activity>
 
         <service android:name=".service.SimpleService"/>
+        <service android:name=".service.LocalService"/>
+        <service android:name=".service.ForegroundService"
+            android:exported="false"/>
     </application>
 
 </manifest>

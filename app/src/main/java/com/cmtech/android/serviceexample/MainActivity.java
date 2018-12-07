@@ -11,18 +11,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.cmtech.android.serviceexample.service.ForegroundService;
 import com.cmtech.android.serviceexample.service.LocalService;
 import com.cmtech.android.serviceexample.service.SimpleService;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    private Button btnStartService;
-    private Button btnStopService;
 
-    Button btnBind;
-    Button btnUnBind;
-    Button btnGetDatas;
     /**
      * ServiceConnection代表与服务的连接，它只有两个方法，
      * onServiceConnected和onServiceDisconnected，
@@ -36,41 +32,46 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnStartService = findViewById(R.id.btn_startservice);
-        btnStartService.setOnClickListener(new View.OnClickListener() {
+        final Intent startIntent = new Intent(MainActivity.this, SimpleService.class);
+
+        Button btnStartSimpleService = findViewById(R.id.btn_startservice);
+        btnStartSimpleService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SimpleService.class);
-                startService(intent);
+
+                startService(startIntent);
             }
         });
 
-        btnStopService = findViewById(R.id.btn_stopservice);
-        btnStopService.setOnClickListener(new View.OnClickListener() {
+        Button btnStopSimpleService = findViewById(R.id.btn_stopservice);
+        btnStopSimpleService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SimpleService.class);
-                stopService(intent);
+                stopService(startIntent);
             }
         });
 
-        btnBind = (Button) findViewById(R.id.BindService);
-        btnUnBind = (Button) findViewById(R.id.unBindService);
-        btnGetDatas = (Button) findViewById(R.id.getServiceDatas);
+
+
+        Button btnBindService = findViewById(R.id.BindService);
+        Button btnUnBindService = findViewById(R.id.unBindService);
+        Button btnGetDatas = findViewById(R.id.getServiceDatas);
+
         //创建绑定对象
-        final Intent intent = new Intent(this, LocalService.class);
+        final Intent bindIntent = new Intent(this, LocalService.class);
 
         // 开启绑定
-        btnBind.setOnClickListener(new View.OnClickListener() {
+        btnBindService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "绑定调用：bindService");
                 //调用绑定方法
-                bindService(intent, conn, Service.BIND_AUTO_CREATE);
+                bindService(bindIntent, conn, Service.BIND_AUTO_CREATE);
             }
         });
+
         // 解除绑定
-        btnUnBind.setOnClickListener(new View.OnClickListener() {
+        btnUnBindService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "解除绑定调用：unbindService");
@@ -118,5 +119,29 @@ public class MainActivity extends AppCompatActivity {
                 mService=null;
             }
         };
+
+
+        Button btnStart= findViewById(R.id.startForeground);
+        Button btnStop= findViewById(R.id.stopForeground);
+        final Intent foregroundIntent = new Intent(this,ForegroundService.class);
+
+
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                foregroundIntent.putExtra("cmd",0);//0,开启前台服务,1,关闭前台服务
+                startService(foregroundIntent);
+            }
+        });
+
+
+        btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                foregroundIntent.putExtra("cmd",1);//0,开启前台服务,1,关闭前台服务
+                startService(foregroundIntent);
+                stopService(foregroundIntent);
+            }
+        });
     }
 }

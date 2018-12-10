@@ -121,12 +121,10 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-        Button btnStart= findViewById(R.id.startForeground);
-        Button btnStop= findViewById(R.id.stopForeground);
-        final Intent foregroundIntent = new Intent(this,ForegroundService.class);
+        final Intent foregroundIntent = new Intent(this, ForegroundService.class);
 
-
-        btnStart.setOnClickListener(new View.OnClickListener() {
+        Button btnStartForeground= findViewById(R.id.startForeground);
+        btnStartForeground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 foregroundIntent.putExtra("cmd",0);//0,开启前台服务,1,关闭前台服务
@@ -134,16 +132,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        btnStop.setOnClickListener(new View.OnClickListener() {
+        Button btnStopForeground= findViewById(R.id.stopForeground);
+        btnStopForeground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 foregroundIntent.putExtra("cmd",1);//0,开启前台服务,1,关闭前台服务
-                startService(foregroundIntent);
                 stopService(foregroundIntent);
             }
         });
 
-
+        Button btnTestBroadcast = findViewById(R.id.testbroadcast);
+        btnTestBroadcast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, BroadcastActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

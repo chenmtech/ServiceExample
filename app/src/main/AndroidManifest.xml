@@ -17,10 +17,18 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.SimpleService"/>
-        <service android:name=".service.LocalService"/>
-        <service android:name=".service.ForegroundService"
-            android:exported="false"/>
+        <service android:name=".service.SimpleService" />
+        <service android:name=".service.LocalService" />
+        <service
+            android:name=".service.ForegroundService"
+            android:exported="false" />
+
+        <activity android:name=".BroadcastActivity" />
+
+        <receiver
+            android:name=".broadcastreceiver.DynamicReceiver"
+            android:enabled="true"
+            android:exported="false"></receiver>
     </application>
 
 </manifest>

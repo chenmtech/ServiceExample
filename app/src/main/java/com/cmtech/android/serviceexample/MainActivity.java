@@ -7,7 +7,10 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -17,7 +20,7 @@ import com.cmtech.android.serviceexample.service.SimpleService;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-
+    private static final String START_TAG = TAG + "启动顺序";
 
     /**
      * ServiceConnection代表与服务的连接，它只有两个方法，
@@ -27,10 +30,20 @@ public class MainActivity extends AppCompatActivity {
     private ServiceConnection conn;
     private LocalService mService;
 
+    // 工具条
+    private Toolbar toolbar;
+    private MenuItem menuSwitch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(START_TAG, "onCreate()");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 创建ToolBar
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         final Intent startIntent = new Intent(MainActivity.this, SimpleService.class);
 
@@ -149,5 +162,51 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        // 更新工具条Title
+        toolbar.setTitle("MainActivity");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.i(START_TAG, "onCreateOptionsMenu()");
+        getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
+        menuSwitch = menu.findItem(R.id.toolbar_switch);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.i(START_TAG, "onPrepareOptionsMenu()");
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(START_TAG, "onOptionsItemSelected()");
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                break;
+
+            case R.id.toolbar_switch:
+                Log.i(START_TAG, "select menuitem switch.");
+                break;
+
+        }
+        return true;
+    }
+
+    @Override
+    protected void onStart() {
+        Log.i(START_TAG, "onStart()");
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.i(START_TAG, "onResume()");
+        super.onResume();
     }
 }

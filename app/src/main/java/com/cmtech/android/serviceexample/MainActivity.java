@@ -191,11 +191,12 @@ public class MainActivity extends AppCompatActivity {
         btnSendNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(foregroundService != null) {
+                /*if(foregroundService != null) {
                     Random rand = new Random();
                     int i = rand.nextInt();
                     foregroundService.updateMessage(String.valueOf(i));
-                }
+                }*/
+                foregroundService.warn();
             }
         });
 

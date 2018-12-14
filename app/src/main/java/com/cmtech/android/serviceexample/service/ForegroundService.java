@@ -6,8 +6,12 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -41,11 +45,14 @@ public class ForegroundService extends Service implements IForegroundServiceUpda
     private NotificationCompat.Builder notificationBuilder;
     private NotificationManager notificationManager;
 
+    private Ringtone notificationRingtone;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         notiTitle = "欢迎使用" + getResources().getString(R.string.app_name);
+        notificationRingtone = RingtoneManager.getRingtone(this, Settings.System.DEFAULT_RINGTONE_URI);
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         initNotificationBuilder();
@@ -91,14 +98,24 @@ public class ForegroundService extends Service implements IForegroundServiceUpda
     @Override
     public void updateMessage(String msg) {
 
-        sendNotification(msg);
+        sendNotification(msg, true);
 
         Log.i(TAG, msg);
     }
 
-
     private void sendNotification(String content) {
+        sendNotification(content, false);
+    }
+
+    private void sendNotification(String content, boolean isPlaySound) {
+        if(isPlaySound) {
+            notificationRingtone.play();
+        }
         notificationManager.notify(SERVICE_NOTIFICATION_ID, createNotification(content));
+    }
+
+    public void warn() {
+        notificationRingtone.play();
     }
 
     /**

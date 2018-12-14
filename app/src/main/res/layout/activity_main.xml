@@ -57,6 +57,12 @@
         android:text="关闭前台服务"/>
 
     <Button
+        android:id="@+id/sendNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="向前台服务发送通知"/>
+
+    <Button
         android:id="@+id/testbroadcast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

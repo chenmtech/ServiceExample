@@ -18,6 +18,8 @@ import com.cmtech.android.serviceexample.service.ForegroundService;
 import com.cmtech.android.serviceexample.service.LocalService;
 import com.cmtech.android.serviceexample.service.SimpleService;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final String START_TAG = TAG + "启动顺序";
@@ -33,6 +35,35 @@ public class MainActivity extends AppCompatActivity {
     // 工具条
     private Toolbar toolbar;
     private MenuItem menuSwitch;
+
+    private ForegroundService foregroundService;
+
+    private ServiceConnection foregroundServiceConnect = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            foregroundService = ((ForegroundService.DeviceServiceBinder)iBinder).getService();
+
+            // 成功绑定后初始化
+            if(foregroundService != null) {
+                initialize();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            if(foregroundService != null) {
+                Intent stopIntent = new Intent(MainActivity.this, ForegroundService.class);
+                stopService(stopIntent);
+                foregroundService = null;
+            }
+            finish();
+        }
+    };
+
+    private void initialize() {
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 foregroundIntent.putExtra("cmd",0);//0,开启前台服务,1,关闭前台服务
                 startService(foregroundIntent);
+                bindService(foregroundIntent, foregroundServiceConnect, BIND_AUTO_CREATE);
             }
         });
 
@@ -150,7 +182,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 foregroundIntent.putExtra("cmd",1);//0,开启前台服务,1,关闭前台服务
+                unbindService(foregroundServiceConnect);
                 stopService(foregroundIntent);
+            }
+        });
+
+        Button btnSendNotification = findViewById(R.id.sendNotification);
+        btnSendNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(foregroundService != null) {
+                    Random rand = new Random();
+                    int i = rand.nextInt();
+                    foregroundService.updateMessage(String.valueOf(i));
+                }
             }
         });
 

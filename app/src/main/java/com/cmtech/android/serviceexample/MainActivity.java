@@ -17,8 +17,10 @@ import android.widget.Button;
 import com.cmtech.android.serviceexample.service.ForegroundService;
 import com.cmtech.android.serviceexample.service.LocalService;
 import com.cmtech.android.serviceexample.service.SimpleService;
+import com.mob.tools.utils.UIHandler;
 
-import java.util.Random;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -209,6 +211,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button btnQQRegister = findViewById(R.id.registerusingqq);
+        btnQQRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
 
         // 更新工具条Title
         toolbar.setTitle("MainActivity");
@@ -254,5 +264,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         Log.i(START_TAG, "onResume()");
         super.onResume();
+    }
+
+    private void registerusingqq() {
+        Platform plat = ShareSDK.getPlatform(QQ.NAME);
+        if (plat == null) {
+            //popupOthers();
+            return;
+        }
+        //判断指定平台是否已经完成授权
+        if(plat.isAuthValid()) {
+            String userId = plat.getDb().getUserId();
+            if (userId != null) {
+                UIHandler.sendEmptyMessage(MSG_USERID_FOUND, this);
+                //login(plat.getName(), userId, null);
+                return;
+            }
+        }
+        plat.setPlatformActionListener(this);
+        // true不使用SSO授权，false使用SSO授权
+        plat.SSOSetting(true);
+        //获取用户资料
+        plat.showUser(null);
     }
 }

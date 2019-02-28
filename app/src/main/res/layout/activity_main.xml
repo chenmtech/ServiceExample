@@ -67,4 +67,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="测试广播"/>
+
+    <Button
+        android:id="@+id/registerusingqq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="QQ登录"/>
 </LinearLayout>

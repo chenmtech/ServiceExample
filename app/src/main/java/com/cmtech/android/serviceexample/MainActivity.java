@@ -13,14 +13,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.cmtech.android.serviceexample.service.ForegroundService;
 import com.cmtech.android.serviceexample.service.LocalService;
 import com.cmtech.android.serviceexample.service.SimpleService;
-import com.mob.tools.utils.UIHandler;
+
+import java.util.HashMap;
 
 import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.tencent.qq.QQ;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -268,23 +272,52 @@ public class MainActivity extends AppCompatActivity {
 
     private void registerusingqq() {
         Platform plat = ShareSDK.getPlatform(QQ.NAME);
-        if (plat == null) {
-            //popupOthers();
+        if (plat == null && !plat.isClientValid()) {
+            Toast.makeText(this, "无法登陆", Toast.LENGTH_SHORT).show();
             return;
         }
         //判断指定平台是否已经完成授权
         if(plat.isAuthValid()) {
             String userId = plat.getDb().getUserId();
             if (userId != null) {
-                UIHandler.sendEmptyMessage(MSG_USERID_FOUND, this);
-                //login(plat.getName(), userId, null);
+                Toast.makeText(this, "已经授权", Toast.LENGTH_SHORT).show();
+                login(plat.getName(), userId, null);
                 return;
             }
         }
-        plat.setPlatformActionListener(this);
+        plat.setPlatformActionListener(new PlatformActionListener() {
+            @Override
+            public void onComplete(Platform platform, int action, HashMap<String, Object> hashMap) {
+                if (action == Platform.ACTION_USER_INFOR) {
+                    Toast.makeText(MainActivity.this, "授权成功", Toast.LENGTH_SHORT).show();
+                    login(platform.getName(), platform.getDb().getUserId(), hashMap);
+                }
+                System.out.println(hashMap);
+                System.out.println("------User Name ---------" + platform.getDb().getUserName());
+                System.out.println("------User ID ---------" + platform.getDb().getUserId());
+            }
+
+            @Override
+            public void onError(Platform platform, int action, Throwable throwable) {
+                if (action == Platform.ACTION_USER_INFOR) {
+                    Toast.makeText(MainActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancel(Platform platform, int action) {
+                if (action == Platform.ACTION_USER_INFOR) {
+                    Toast.makeText(MainActivity.this, "授权取消", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         // true不使用SSO授权，false使用SSO授权
-        plat.SSOSetting(true);
+        plat.SSOSetting(false);
         //获取用户资料
-        plat.showUser(null);
+        plat.authorize();
+    }
+
+    private void login(String plat, String userId, HashMap<String, Object> userInfo) {
+        Toast.makeText(MainActivity.this, "开始登陆", Toast.LENGTH_SHORT).show();
     }
 }

@@ -23,6 +23,14 @@ MobSDK {
     appKey "2a430debecf44"
     appSecret "4e17d4b158fc8f4b230f6e2023464ac4"
     ShareSDK {
+        //平台配置信息
+        devInfo {
+            QQ {
+                appId "100371282"
+                appKey "aed9b0303e3ed1e27bae87c33761161d"
+                shareByAppClient true
+            }
+        }
     }
 }
 

@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private MenuItem menuSwitch;
 
+    private DataObject dataObj;
+
     private ForegroundService foregroundService;
 
     private ServiceConnection foregroundServiceConnect = new ServiceConnection() {
@@ -220,6 +222,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+            }
+        });
+
+        Button startThread = findViewById(R.id.btn_startthread);
+        startThread.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataObj = new DataObject();
+                dataObj.start();
+
+            }
+        });
+
+        Button stopThread = findViewById(R.id.btn_stopthread);
+        stopThread.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataObj.stop();
             }
         });
 

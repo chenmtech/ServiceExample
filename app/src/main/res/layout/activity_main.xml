@@ -73,4 +73,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="QQ登录"/>
+
+    <Button
+        android:id="@+id/btn_startthread"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="启动线程"/>
+
+    <Button
+        android:id="@+id/btn_stopthread"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="停止线程"/>
 </LinearLayout>

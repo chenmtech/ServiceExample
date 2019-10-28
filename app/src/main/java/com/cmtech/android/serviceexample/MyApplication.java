@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.mob.MobSDK;
 import com.vise.log.ViseLog;
+import com.vise.log.inner.FileTree;
 import com.vise.log.inner.LogcatTree;
 
 import static android.util.Log.VERBOSE;
@@ -34,6 +35,8 @@ public class MyApplication extends Application {
         ViseLog.getLogConfig().configAllowLog(true).configLevel(VERBOSE).configTagPrefix("chenm").configShowBorders(false);
 
         ViseLog.plant(new LogcatTree());
+
+        ViseLog.plant(new FileTree(context, "chenm"));
     }
 
     // 获取Application Context

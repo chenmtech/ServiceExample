@@ -1,11 +1,18 @@
 package com.cmtech.android.serviceexample;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,13 +25,22 @@ import android.widget.Toast;
 import com.cmtech.android.serviceexample.service.ForegroundService;
 import com.cmtech.android.serviceexample.service.LocalService;
 import com.cmtech.android.serviceexample.service.SimpleService;
+import com.vise.log.ViseLog;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.tencent.qq.QQ;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -246,6 +262,68 @@ public class MainActivity extends AppCompatActivity {
 
         // 更新工具条Title
         toolbar.setTitle("MainActivity");
+
+        if(BuildConfig.DEBUG)
+          ViseLog.e("hi%s--%d");
+
+        checkPermissions();
+
+
+    }
+
+    public void initialize1() {
+        ViseLog.e(Environment.getExternalStorageDirectory().getPath());
+        ViseLog.e(MyApplication.getContext().getExternalFilesDir(null));
+        File DIR_WECHAT_DOWNLOAD = new File(Environment.getExternalStorageDirectory().getPath() + "/tencent/MicroMsg/Download");
+        File[] files = DIR_WECHAT_DOWNLOAD.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.getName().endsWith(".mp3");
+            }
+        });
+        for(File file : files) {
+            ViseLog.e(file.getPath());
+        }
+    }
+
+    // 检查权限
+    private void checkPermissions() {
+        List<String> permission = new ArrayList<>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permission.add(ACCESS_COARSE_LOCATION);
+            }
+        }
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            permission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if(permission.size() != 0)
+            ActivityCompat.requestPermissions(this, permission.toArray(new String[0]), 1);
+        else
+            initialize1();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                for(int result : grantResults) {
+                    if(result != PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(this, "没有必要的权限，程序无法正常运行", Toast.LENGTH_SHORT).show();
+                        finish();
+                        break;
+                    }
+                }
+                break;
+        }
+
+        initialize1();
     }
 
     @Override

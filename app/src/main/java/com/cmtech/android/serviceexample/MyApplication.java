@@ -8,6 +8,8 @@ import com.vise.log.ViseLog;
 import com.vise.log.inner.FileTree;
 import com.vise.log.inner.LogcatTree;
 
+import org.litepal.LitePal;
+
 import static android.util.Log.VERBOSE;
 
 /**
@@ -29,13 +31,15 @@ public class MyApplication extends Application {
 
         Context context = getApplicationContext();
 
+        // 初始化LitePal
+        LitePal.initialize(context);
+        LitePal.getDatabase();
+
         // 初始化ShareSDK
         MobSDK.init(context);
 
         ViseLog.getLogConfig().configAllowLog(true).configLevel(VERBOSE).configTagPrefix("chenm").configShowBorders(false);
-
         ViseLog.plant(new LogcatTree());
-
         ViseLog.plant(new FileTree(context, "chenm"));
     }
 

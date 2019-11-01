@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<litepal>
+    <dbname value = "testDb"/>
+
+    <version value="7"/>
+
+    <list>
+        <mapping class="com.cmtech.android.serviceexample.bmefile.BmeFileHead30"/>
+        <mapping class="com.cmtech.android.serviceexample.ecgfile.EcgFileHead"/>
+        <mapping class="com.cmtech.android.serviceexample.ecgfile.User"/>
+        <mapping class="com.cmtech.android.serviceexample.Book"/>
+        <mapping class="com.cmtech.android.serviceexample.Person"/>
+    </list>
+</litepal>

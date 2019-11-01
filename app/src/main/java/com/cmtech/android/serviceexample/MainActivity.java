@@ -22,16 +22,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.cmtech.android.serviceexample.bmefile.BmeFileDataType;
+import com.cmtech.android.serviceexample.bmefile.BmeFileHead;
+import com.cmtech.android.serviceexample.bmefile.BmeFileHead10;
+import com.cmtech.android.serviceexample.bmefile.BmeFileHead30;
+import com.cmtech.android.serviceexample.ecgfile.EcgFileHead;
+import com.cmtech.android.serviceexample.ecgfile.EcgLeadType;
+import com.cmtech.android.serviceexample.ecgfile.User;
 import com.cmtech.android.serviceexample.service.ForegroundService;
 import com.cmtech.android.serviceexample.service.LocalService;
 import com.cmtech.android.serviceexample.service.SimpleService;
 import com.vise.log.ViseLog;
+
+import org.litepal.LitePal;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -268,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
         checkPermissions();
 
-
+        testLitePal();
     }
 
     public void initialize1() {
@@ -417,5 +427,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void login(String plat, String userId, HashMap<String, Object> userInfo) {
         Toast.makeText(MainActivity.this, "开始登陆", Toast.LENGTH_SHORT).show();
+    }
+
+    private void testLitePal(){
+        Person p1 = new Person();
+        p1.name = "cm1";
+        p1.save();
+        Book b1 = new Book();
+        b1.person = p1;
+        b1.price = 2;
+        b1.save();
+
+        List<Book> headList = LitePal.findAll(Book.class);
+        ViseLog.e(headList);
     }
 }

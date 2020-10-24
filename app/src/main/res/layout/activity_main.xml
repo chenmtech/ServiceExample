@@ -7,82 +7,21 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <com.cmtech.android.serviceexample.RollWaveView
+        android:id="@+id/roll_view"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Light"/>
+        android:layout_height="300px"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"/>
+
+    <com.cmtech.android.serviceexample.ScanWaveView
+        android:layout_width="match_parent"
+        android:layout_height="300px"
+        android:layout_gravity="center_horizontal"/>
 
     <Button
-        android:id="@+id/btn_startservice"
+        android:id="@+id/btn_update_roll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="启动服务"/>
-
-    <Button
-        android:id="@+id/btn_stopservice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="停止服务"/>
-
-    <Button
-        android:id="@+id/BindService"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="绑定服务"/>
-
-    <Button
-        android:id="@+id/unBindService"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="解绑服务"/>
-
-    <Button
-        android:id="@+id/getServiceDatas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="获取服务数据"/>
-
-    <Button
-        android:id="@+id/startForeground"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="开启前台服务"/>
-
-    <Button
-        android:id="@+id/stopForeground"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="关闭前台服务"/>
-
-    <Button
-        android:id="@+id/sendNotification"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="向前台服务发送通知"/>
-
-    <Button
-        android:id="@+id/testbroadcast"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="测试广播"/>
-
-    <Button
-        android:id="@+id/registerusingqq"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="QQ登录"/>
-
-    <Button
-        android:id="@+id/btn_startthread"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="启动线程"/>
-
-    <Button
-        android:id="@+id/btn_stopthread"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="停止线程"/>
 </LinearLayout>

@@ -15,8 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cmtech.android.TestAsyncTask;
 import com.vise.log.ViseLog;
 
 import java.io.File;
@@ -31,8 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final String START_TAG = TAG + "启动顺序";
 
-    private RollWaveView rollView;
-    private Button updateRoll;
+    private Button startTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +42,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        rollView = findViewById(R.id.roll_view);
+        final TextView tvInfo = findViewById(R.id.tv_info);
 
-        updateRoll = findViewById(R.id.btn_update_roll_view);
-        updateRoll.setOnClickListener(new View.OnClickListener() {
+        startTask = findViewById(R.id.btn_start_task);
+        startTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rollView.reset();
+                tvInfo.setText("start");
+                new TestAsyncTask(MainActivity.this, "hi").execute();
+                tvInfo.setText("stop");
+            }
+        });
+
+        Button doSome = findViewById(R.id.btn_do_something);
+        doSome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvInfo.setText("do something");
             }
         });
 
